@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_infinite_list/models/post_repo.dart';
 import 'package:flutter_infinite_list/models/registration/failures.dart';
+import 'package:flutter_infinite_list/models/registration/user_model.dart';
+import 'package:mysql1/mysql1.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -21,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     signInOrFailure.fold(
         (authFailure) => emit(
             AuthState(status: AuthStatus.failure, authFailure: authFailure)),
-        (r) => emit(AuthState(status: AuthStatus.authorized)));
+        (r) => emit(AuthState(status: AuthStatus.authorized, userData: r)));
   }
 
   Future<void> _signUpMap(SignUpEvent event, Emitter<AuthState> emit) async {

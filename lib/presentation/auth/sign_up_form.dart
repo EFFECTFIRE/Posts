@@ -33,7 +33,13 @@ class SignUpForm extends StatelessWidget {
                 showCursor: true,
                 onChanged: (email) => _email = email,
                 onSaved: (email) => _email = email!,
-                //validator: (email) {},
+                validator: (email) {
+                  const String emailRegex =
+                      r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
+                  if (!RegExp(emailRegex).hasMatch(email!)) {
+                    return "invalid email";
+                  }
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: "Password"),
@@ -42,7 +48,14 @@ class SignUpForm extends StatelessWidget {
                 showCursor: true,
                 onChanged: (password) => _password = password,
                 onSaved: (password) => _password = password!,
-                //validator: (password) {},
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return "password can't be empty";
+                  }
+                  if (password.length <= 6) {
+                    return "password is very short";
+                  }
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: "Name"),
@@ -51,7 +64,14 @@ class SignUpForm extends StatelessWidget {
                 showCursor: true,
                 onChanged: (displayName) => _displayName = displayName,
                 onSaved: (displayName) => _displayName = displayName!,
-                //validator: (displayName) {},
+                validator: (displayName) {
+                  if (displayName == null || displayName.isEmpty) {
+                    return "nickname can't be empty";
+                  }
+                  if (displayName.length >= 20) {
+                    return "nickname is very long. Max length 20 symbols";
+                  }
+                },
               ),
               ElevatedButton(
                   onPressed: () {

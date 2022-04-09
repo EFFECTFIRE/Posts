@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_infinite_list/models/post_data.dart';
 import 'package:flutter_infinite_list/models/registration/failures.dart';
+import 'package:flutter_infinite_list/mysql.dart';
 
 class PostProvider {
   static final _instance = FirebaseFirestore.instance;
+  static final db = MySql();
   Future<Either<NoteFailure, List<PostData>>> getPosts() async {
     try {
       return right(await _instance.collection("posts").get().then((value) =>

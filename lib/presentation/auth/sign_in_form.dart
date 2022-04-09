@@ -1,9 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_infinite_list/bloc/auth/auth_bloc.dart';
-import 'package:flutter_infinite_list/presentation/bottom_loader.dart';
 import 'package:flutter_infinite_list/presentation/post_page.dart';
 
 class SignInForm extends StatelessWidget {
@@ -29,7 +27,13 @@ class SignInForm extends StatelessWidget {
               showCursor: true,
               onChanged: (email) => _email = email,
               onSaved: (email) => _email = email!,
-              //validator: (email) {},
+              validator: (email) {
+                const String emailRegex =
+                    r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
+                if (!RegExp(emailRegex).hasMatch(email!)) {
+                  return "invalid email";
+                }
+              },
             ),
             TextFormField(
               decoration: InputDecoration(labelText: "Password"),
@@ -38,7 +42,11 @@ class SignInForm extends StatelessWidget {
               showCursor: true,
               onChanged: (password) => _password = password,
               onSaved: (password) => _password = password!,
-              //validator: (password) {},
+              validator: (password) {
+                if (password == null || password.isEmpty) {
+                  return "password can't be empty";
+                }
+              },
             ),
             ElevatedButton(
                 onPressed: () {
@@ -60,8 +68,9 @@ class SignInForm extends StatelessWidget {
                                   ],
                                 ));
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.status.toString())));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(state.status.toString() +
+                                state.userData!.name!)));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
